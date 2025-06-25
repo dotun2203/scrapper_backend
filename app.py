@@ -5,6 +5,10 @@ from scraper.scrape_nysc import scrape_nysc
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/')
+def home():
+    return "✅ NYSC Scraper is live and ready!"
+
 @app.route('/api/scrape', methods=['POST'])
 def scrape():
     year = request.json.get('year')
