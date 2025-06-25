@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, abort
 from flask_cors import CORS
 from scraper.scrape_nysc import scrape_nysc
 import os
@@ -24,7 +24,10 @@ def scrape():
 
 @app.route('/api/download/<filename>', methods=['GET'])
 def download_file(filename):
-    return send_file(f"./outputs/{filename}", as_attachment=True)
+    filepath = os.path.join('outputs', filename)
+    if not os.path.exists(filepath):
+        return abort(404, description=f"File {filename} not found.")
+    return send_file(filepath, as_attachment=True)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
